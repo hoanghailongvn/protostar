@@ -86,7 +86,7 @@ va       true
 [0x080483f4]> V
 ```
 - Visual mode:
-<img src="pictures/visual%20mode.png">
+<img src="pictures/visual_mode.png">
 
 - Press p/P to rotate print modes (hex, diasm, debug, words, buf), rotate to diasm mode:
 <img src="pictures/main_in_disas.png">
