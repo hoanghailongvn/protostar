@@ -90,7 +90,7 @@ user@protostar:/opt/protostar/bin$
 - 4 lần chạy đầu không có lỗi do return address chưa bị ghi đè.
 - segmentation fault: do return address đã bị ghi đè đến địa chỉ không hợp lệ (segmentation fault ở case successfully do chạy hàm win() xong không có return address).
 - lần chạy thứ 4: lỗi do đã bắt đầu ghi đè lên return address (\x00 để terminate string ghi đè vào byte đầu tiên)
-- lần chạy thứ 5: bắt đầu ghi đè byte đầu tiên của địa chỉ hàm win().
+- lần chạy thứ 5: bắt đầu ghi đè byte đầu tiên bởi địa chỉ hàm win().
 - lần chạy thứ 8: ghi đè đầy đủ địa chỉ của hàm win() lên return address => code flow succcessfully changed. 
 
 ## Problem
@@ -106,3 +106,4 @@ done
 
 # References
 - How to type in hex input into radare2 debug mode: https://reverseengineering.stackexchange.com/questions/21098/how-do-i-type-in-hex-input-into-radare2-debug-mode
+- \x80 problem: https://bugs.python.org/issue38357
