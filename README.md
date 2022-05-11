@@ -2,18 +2,23 @@
 
 ## Setup
 - Cài đặt 1 máy ảo kali và 1 máy protostar:
+
 <img src="pictures/setup_vm.png">
 
 - Cài đặt mạng 2 máy:
+
 <img src="pictures/setup_vm_network.png">
 
 - Lấy địa chỉ ip của máy protostar:
+
 <img src="pictures/protostar_ip.png">
 
 - Lấy folder /opt/protostar/bin về host:
+
 <img src="pictures/scp.png">
 
 - ssh connect:
+
 <img src="pictures/ssh.png">
 
 ## Tools

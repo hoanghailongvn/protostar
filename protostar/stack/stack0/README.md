@@ -86,18 +86,23 @@ va       true
 [0x080483f4]> V
 ```
 - Visual mode:
+
 <img src="pictures/visual_mode.png">
 
 - Press p/P to rotate print modes (hex, diasm, debug, words, buf), rotate to diasm mode:
+
 <img src="pictures/main_in_disas.png">
 
 - Thấy 1 call đến gets, 2 call đến puts => nhanh chóng đối chiếu được source code với disas:
+
 <img src="pictures/compare.png">
 
 - Phân tích stack:
+
 <img src="pictures/stack.png">
 
 => Chỉ cần nhập quá 64 ký tự là sẽ ghi đè lên giá trị của biến modified:
+
 <img src="pictures/success.png">
 
 # References
