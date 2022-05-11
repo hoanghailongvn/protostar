@@ -31,8 +31,7 @@ gets()
 ## Recon
 
 ```
-:dizzy:
-:boom:
+
 ```
 
 ## Exploit
@@ -95,7 +94,7 @@ user@protostar:/opt/protostar/bin$
 - lần chạy thứ 8: ghi đè đầy đủ địa chỉ của hàm win() lên return address => code flow succcessfully changed. 
 
 ## Problem
-- Khi chạy script trên ở máy protostar thì không có vấn đề, tuy nhiên khi chạy ở kali linux thì bị lỗi do \x80 được chuyển thãnh \x80\xc2 và tương tự các hexa lớn hơn \x80. Do tối đa là \x7f = 127 là tối đa của ascii.
+- Khi chạy script trên ở máy protostar thì không có vấn đề, tuy nhiên khi chạy ở kali linux thì bị lỗi do \x80 được chuyển thãnh \x80\xc2 và tương tự các hexa lớn hơn \x80. Do \x7f = 127 là tối đa của ascii.
 - script in kali linux:
 ```
 for i in {0..15}
