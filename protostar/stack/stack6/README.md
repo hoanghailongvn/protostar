@@ -64,7 +64,7 @@ print(padding + eip)
 
   <img src="pictures/system_stack.png">
 
-- Nó nghĩ rằng đỉnh stack đang chứa return address của nó và đỉnh stack + 0x4 là argument của nó. Do đó, ta cũng có thể quyết định return address của system và arguments của nó dùng python script sau:
+- Hàm system nghĩ rằng đỉnh stack đang chứa return address của nó và đỉnh stack + 0x4 là argument. Do đó, ta cũng có thể quyết định return address của system và arguments của hàm system dùng python script sau:
 ```
 import struct
 padding = 'a'*(0x4c + 0x4)
