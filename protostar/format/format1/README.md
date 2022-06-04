@@ -27,6 +27,7 @@ int main(int argc, char **argv)
 printf(): hàm printf() không check liệu input có đúng định dạng hay không.\
 %n: write
 
+Nếu trong hàm printf có các format string (%x, %d, %n): hàm sẽ tự động lấy các tham số tương ứng trong stack.
 ## Exploit
 - Tìm địa chỉ biến target: 0x08049638
 
@@ -39,8 +40,8 @@ printf(): hàm printf() không check liệu input có đúng định dạng hay 
 - Cho địa chỉ của biến target vào stack
 - làm cho %n trong printf() ứng với địa chỉ của biến targe
 
-Xây dựng payload:
-- sử dụng kĩ thuật fixed-length payload như cuối video của liveoverflow
+Xây dựng attack-string:
+- sử dụng kĩ thuật fixed-length attack-string như cuối video của liveoverflow
   ```
   ./format1 "`python -c "print ('\x38\x96\x04\x08' + 'A'*500)[:500]"`"
   ```
