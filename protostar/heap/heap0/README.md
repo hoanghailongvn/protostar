@@ -47,7 +47,9 @@ int main(int argc, char **argv)
 strcpy()
 ## Exploit
 - Phân tích main:
+
 <img src="pictures/main_analysis.png">
+
 - Khai thác: overflow biến d để ghi đè địa chỉ winner() thay cho hàm nowinnner()
 - Địa chỉ hàm winner(): 0x08048464
 - Attack-string:
