@@ -40,10 +40,9 @@ This level introduces the Doug Lea Malloc (dlmalloc) and how heap meta data can 
 
 ## Heap chunk
 Vùng nhớ được tạo bởi malloc() sẽ trông như dưới đây, gọi là chunk. Trong đó:
-- 4 bytes prev_size: nếu chunk trước free, prev_size là kích thước của chunk đó.
-- 4 bytes size: chứa kích trước của chunk này, do luôn là cấp số nhân của 8 nên 3 bit cuối luôn bằng 0. Nên 3 bit này được dùng để lưu thông tin, trong đó the lowest bit of size called PREV_INUSE indicates whether the previous chunk is used or not.
+- 4 bytes prev_size: nếu previous chunk free, prev_size là kích thước của chunk đó.
+- 4 bytes size: kích trước của chunk này. Trong đó the lowest bit of size called PREV_INUSE indicates whether the previous chunk is used or not.
 - data: địa chỉ của vùng này được trả về cho người dùng.
-
 
 ```
 .            +----------------------------------+
@@ -57,7 +56,7 @@ Vùng nhớ được tạo bởi malloc() sẽ trông như dưới đây, gọi 
 nextchunk -> | prev_size ...                    |
              :                                  :
 ```
-Các chunk được free được tổ chức dưới dạng double linked list.
+Các chunk được free được tổ chức dưới dạng double linked list.\
 Khi chunk được free, 8 bytes đầu của vùng data được dùng để chứa fd (địa chỉ node tiếp theo) và bk (địa chỉ node trước).
 ```
 .            +----------------------------------+
@@ -75,7 +74,7 @@ Khi chunk được free, 8 bytes đầu của vùng data được dùng để ch
 nextchunk -> | prev_size ...                    |
              :                                  :
 ```
-## free
+## free()
 Đoạn code quan trọng trong hàm free - dlmalloc 2002
 ```
     else if (!chunk_is_mmapped(p)) {
@@ -122,17 +121,17 @@ nextchunk -> | prev_size ...                    |
         check_free_chunk(p);
       }
 ```
-Ta có thể hiểu như sau, khi hàm free() được gọi:
-- Vùng nhớ sẽ được giải phóng.
-- Kiểm tra 2 chunks kế trước và tiếp theo xem có chunk nào free không.
-- Nếu không chunk nào free, add chunk vừa free vào double linkedlist.
-- Nếu chunk trước nó free, unlink chunk trước, gộp với chunk hiện tại, add chunk mới được tạo thành vào double linked list. (consolidate backward)
-- Nếu chunk sau nó, unlink chunk sau, gộp với chunk hiện tại, add chunk mới được tạo thành vào double linked list. (consolidate forward)
+Ta có thể hiểu như sau, khi hàm free(current_chunk) được gọi:
+- Chuyển current_chunk thành free chunk
+- Kiểm tra previous chunk và next chunk xem có cái nào free không.
+- Nếu 2 chunk này không free, thêm luôn current_chunk vào double linkedlist.
+- Nếu previous chunk là free chunk, unlink previous chunk, gộp với current_chunk, add chunk mới được tạo thành vào double linked list. (consolidate backward)
+- Nếu next chunk là free chunk, unlink next chunk, gộp với current_chunk, add chunk mới được tạo thành vào double linked list. (consolidate forward)
 
-Địa chỉ chunk trước được tính bằng địa chỉ của chunk hiện tại trừ đi prev_size\
-Địa chỉ chunk sau được tính bằng địa chỉ của chunk hiện tại cộng với size\
-Kiểm tra chunk trước free hay không bằng cách kiểm tra bit cuối của size current chunk\
-Kiểm tra chunk sau free hay không bằng cách kiểm tra bit cuối của chunk tiếp theo của chunk tiếp theo.
+Địa chỉ previous chunk được tính bằng địa chỉ của current chunk trừ đi prev_size\
+Địa chỉ next chunk được tính bằng địa chỉ của current chunk cộng với size\
+Kiểm tra previous chunk là free hay không bằng cách kiểm tra bit cuối ô size của current chunk\
+Kiểm tra next chunk là free hay không bằng cách kiểm tra bit cuối ô size của "chunk tiếp theo chunk tiếp theo".
 ## unlink
 unlink macro defined as:
 ```
