@@ -187,6 +187,7 @@ Solution: Sử dụng một số thật lớn, ví dụ: 0xfffffffc.
 - Ta sẽ chỉnh sửa prev_size của c thành -4, size của c thành -4:
 ```
                                       c chunk
+                                      ↓
 --------------------------------------+------------+------------+--------------------------------+
                                       |prev_size:  |size:       |                                |
                                       |-4          |-4          |                                |
@@ -195,28 +196,34 @@ Solution: Sử dụng một số thật lớn, ví dụ: 0xfffffffc.
 - Khi đó, previous chunk sẽ là: current chunk -(prev_size):
 ```
                                       c chunk
+                                      ↓
 --------------------------------------+------------+------------+--------------------------------+
                                       |prev_size:  |size:       |                                |
                                       |-4          |-4          |                                |
 --------------------------------------+------------+------------+--------------------------------+
+                                                   ↑
                                                    previous chunk
 ```
 - next chunk sẽ là: current chunk +(size):
 ```
                                       c chunk
+                                      ↓
 -------------------------+------------+------------+------------+--------------------------------+
                          |            |prev_size:  |size:       |                                |
                          |            |-4          |-4          |                                |
 -------------------------+------------+------------+------------+--------------------------------+
+                         ↑
                          next chunk
 ```
 - next chunk của next chunk sẽ là: next chunk +(size), size của next chunk chính là ô prev_size của c chunk, là -4:
 ```
                                       c chunk
+                                      ↓
 ------------+------------+------------+------------+------------+--------------------------------+
             |            |            |prev_size:  |size:       |                                |
             |            |            |-4          |-4          |                                |
 ------------+------------+------------+------------+------------+--------------------------------+
+            ↑            ↑
             next         next chunk
             next
             chunk
@@ -224,10 +231,12 @@ Solution: Sử dụng một số thật lớn, ví dụ: 0xfffffffc.
 - Để không consolidate forward (unlink next chunk), ta phải để bit cuối ô size của next next chunk là 1:
 ```
                                       c chunk
+                                      ↓
 ------------+------------+------------+------------+------------+--------------------------------+
             |            |bit cuối    |prev_size:  |size:       |                                |
             |            |ô này: 1    |-4          |-4          |                                |
 ------------+------------+------------+------------+------------+--------------------------------+
+            ↑            ↑
             next         next chunk
             next
             chunk
@@ -283,11 +292,13 @@ Solution: Viết shell code để trong heap, thay vì ghi winner address vào B
 ## FINAL
 - Tổng kết lại, heap của ta sẽ như sau:
 ```
-a chunk                                    b chunk                                 c chunk
+a chunk                                    b chunk                                c chunk
+↓                                          ↓                                      ↓   
 +----+--------------+----------------------++----+-------------------+------------++-----------+----------+----------+-------------------+-------------------+
 |meta| 8 bytes "A"  | 6 bytes shell code   ||meta| 28 bytes "A"      |bit cuối: 1 ||prev_size: |size:     | 4 bytes  | fd of fake chunk: | bk of fake chunk: |
 |data|              |                      ||data|                   |            ||-4         |-4        | "A"      | 0x0804b11c        | 0x0804c010        |
 +----+--------------+----------------------++----+-------------------+------------++-----------+----------+----------+-------------------+-------------------+
+                                                                                               ↑
                                                                                                fake chunk
 ```
 - a: python -c 'print "A"*8 + "\x68\x64\x88\x04\x08\xC3"'
