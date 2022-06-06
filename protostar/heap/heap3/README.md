@@ -159,16 +159,19 @@ FD = *(P + 8)
 *(FD + 12) = BK
 *(BK + 8) = FD
 ```
-Do ta có thể sử dụng heap overflow để ghi đè lên metadata của chunk, do đó ta có thể lợi dụng macro unlink để ghi giá trị bất kì lên ô nhớ bất kì.
+Do ta có thể sử dụng heap overflow để ghi đè lên metadata của chunk, do đó ta có thể lợi dụng unlink macro để ghi giá trị bất kì lên ô nhớ bất kì.
 
 ## PLT GOT
 Khi chương trình liên kết thư viện động, địa chỉ của các hàm trong thư viện sẽ được lưu trong một bảng gọi là GOT. Nếu thay đổi được giá trị trong bảng GOT, ta có thể thay đổi được luồng chạy của chương trình khi chương trình gọi đến các hàm này.
 
 ## exploit
 - Theo source code, ta có 3 chunk gọi là a, b, c.
-- Dùng string copy vào b để overflow, chỉnh sửa metadata của c.
-- Ta cần lừa hàm free() để kích hoạt unlink macro. Ta có thể chọn consolidate backward hoặc consolidate forward, ta chỉ cần kích hoạt 1 trong 2, nên tắt cái unlink còn lại do nếu không chỉnh sửa bk và fd của chunk được unlink, dễ dàng lỗi do ghi vào vùng không được phép. Trong bài này tôi chọn consolidate backward, tắt consolidate forward.
+- Dùng strcpy vào b để overflow, chỉnh sửa metadata của c.
+- Ta cần lừa hàm free() để kích hoạt unlink macro, tuy nhiên nếu ta unlink chunk mà fd và bk của chunk đó trỏ đến địa chỉ không hợp lệ (vùng không được ghi) sẽ dẫn đến lỗi => không unlink bừa bãi.
+- Khi free(c), chọn consolidate backward, không để consolidate forward.
+
 - Để consolidate backward, bit cuối của size trong c phải = 0.
+- Để không consolidate forward, bit cuối của size của (next chunk của next chunk) phải = 1
 - Chỉnh sửa prev_size và size trong c để lừa free tính sai địa chỉ của previous chunk và next chunk.
 
 **Vấn đề 1: attack-string không thể chứa \x00 - NUL**
