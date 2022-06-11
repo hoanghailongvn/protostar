@@ -1,4 +1,4 @@
-# **net1**
+# **net2**
 ## Source code
 ```
 #include "../common/common.c"
