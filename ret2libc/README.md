@@ -64,6 +64,11 @@ Tương tự [stack6](https://gitlab.com/cs_hoang_hai_long/week9/-/tree/main/pro
   - Tìm địa chỉ system: 0x7ffff7e21860
   - Tìm địa chỉ string /bin/sh: 0x7ffff7f70882
 
+Tắt ASLR:
+```
+echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+```
+
 **Fail attempt #1**
 
 ```
@@ -96,3 +101,7 @@ Kết quả:
 ```
 process 7085 is executing new program: /usr/bin/dash 
 ```
+
+# References
+- ret2libc x64: https://blog.techorganic.com/2015/04/21/64-bit-linux-stack-smashing-tutorial-part-2/
+- 
